@@ -1,11 +1,19 @@
-const express = require('express');
-const app = express()
-const port = 3000
+const app = require('./src/app')
+const { connectDatabase } = require('./src/config/db')
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const port = process.env.PORT || 3000
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+const startServer = async () => {
+  try {
+    await connectDatabase()
+
+    app.listen(port, () => {
+      console.log(`Server listening on port ${port}`)
+    })
+  } catch (error) {
+    console.error('Unable to connect to MySQL:', error.message)
+    process.exitCode = 1
+  }
+}
+
+startServer()
