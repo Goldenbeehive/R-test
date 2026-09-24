@@ -113,4 +113,23 @@ const updateProfile = async (userId, profileData = {}) => {
   return getProfile(userId)
 }
 
-module.exports = { register, login, getProfile, updateProfile }
+const searchUsers = async (query, currentUserId) => {
+  const search = String(query || '').trim()
+  if (search.length < 2) {
+    return []
+  }
+
+  const pattern = `%${search}%`
+  const [rows] = await pool.execute(
+    `SELECT id, username, email, first_name, last_name
+     FROM users
+     WHERE id <> ? AND (username LIKE ? OR email LIKE ? OR first_name LIKE ? OR last_name LIKE ?)
+     ORDER BY username
+     LIMIT 10`,
+    [currentUserId, pattern, pattern, pattern, pattern]
+  )
+
+  return rows
+}
+
+module.exports = { register, login, getProfile, updateProfile, searchUsers }

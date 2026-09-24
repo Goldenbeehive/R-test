@@ -34,4 +34,12 @@ const updateProfile = async (req, res, next) => {
   }
 }
 
-module.exports = { register, login, getProfile, updateProfile }
+const searchUsers = async (req, res, next) => {
+  try {
+    res.json(await authService.searchUsers(req.query.q, req.user.id))
+  } catch (error) {
+    next(error)
+  }
+}
+
+module.exports = { register, login, getProfile, updateProfile, searchUsers }
