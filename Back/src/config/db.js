@@ -6,6 +6,7 @@ dotenv.config()
 const poolConfig = process.env.DATABASE_URL
   ? (() => {
       const databaseUrl = new URL(process.env.DATABASE_URL)
+      const useSsl = databaseUrl.searchParams.get('ssl') === 'true'
 
       return {
         host: databaseUrl.hostname,
@@ -13,6 +14,7 @@ const poolConfig = process.env.DATABASE_URL
         user: decodeURIComponent(databaseUrl.username),
         password: decodeURIComponent(databaseUrl.password),
         database: databaseUrl.pathname.slice(1),
+        ...(useSsl ? { ssl: { rejectUnauthorized: true } } : {}),
       }
     })()
   : {
