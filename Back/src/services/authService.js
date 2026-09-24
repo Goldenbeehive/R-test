@@ -24,7 +24,7 @@ const getProfile = async (userId) => {
   return new User(rows[0])
 }
 
-const register = async (userData) => {
+const register = async (userData = {}) => {
   const { username, email, password, first_name, last_name } = userData
 
   if (!username || !email || !password) {
@@ -50,7 +50,7 @@ const register = async (userData) => {
   }
 }
 
-const login = async (credentials) => {
+const login = async (credentials = {}) => {
   const { email, username, password } = credentials
   const identifier = email || username
 
@@ -86,7 +86,7 @@ const login = async (credentials) => {
   }
 }
 
-const updateProfile = async (userId, profileData) => {
+const updateProfile = async (userId, profileData = {}) => {
   const allowedFields = ['username', 'email', 'first_name', 'last_name']
   const updates = allowedFields.filter((field) => profileData[field] !== undefined)
 
