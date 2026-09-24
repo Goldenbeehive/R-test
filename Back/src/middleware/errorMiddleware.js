@@ -1,6 +1,6 @@
 const AppError = require('../utils/appError')
 
-const errorMiddleware = (error, res) => {
+const errorMiddleware = (error, req, res, next) => {
   const isOperationalError = error instanceof AppError
   const statusCode = isOperationalError ? error.statusCode : 500
 
